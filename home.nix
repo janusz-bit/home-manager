@@ -205,13 +205,15 @@
 
     # Java (Fix dla renderingu GUI w tiling WM)
     _JAVA_AWT_WM_NONREPARENTING = "1";
+
+    QT_STYLE_OVERRIDE = "breeze";
   };
 
-  qt = {
-    enable = true;
-    platformTheme.name = "kde"; # Lub "gtk", jeśli wolisz integrację z GNOME
-    style.name = "breeze";
-  };
+  # qt = {
+  #   enable = true;
+  #   platformTheme.name = "kde"; # Lub "gtk", jeśli wolisz integrację z GNOME
+  #   style.name = "breeze";
+  # };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
