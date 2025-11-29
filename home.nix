@@ -20,6 +20,8 @@
     sha256 = "sha256-2cboGIZy8+t03QTPpp3VhHn6HQFiyMKMjRdiV2MpNHU=";
     #   nix store prefetch-file \
     #   https://download.nvidia.com/XFree86/Linux-x86_64/580.105.08/NVIDIA-Linux-x86_64-580.105.08.run
+
+    # pacman -Q nvidia-utils
   };
 
   home.stateVersion = "25.11"; # Please read the comment before changing.
@@ -46,14 +48,92 @@
 
   services.syncthing.enable = true;
 
-  home.packages = [
+  programs.fish = {
+    enable = true;
+
+    # 1. Wtyczki (odpowiednik conf.d/done.fish)
+    plugins = [
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
+      }
+    ];
+
+    # 2. Aliasy (przeniesione z cachyos-config.fish)
+    shellAliases = {
+      # Eza zamiast ls
+      ls = "eza -al --color=always --group-directories-first --icons=always";
+      la = "eza -a --color=always --group-directories-first --icons=always";
+      ll = "eza -l --color=always --group-directories-first --icons=always";
+      lt = "eza -aT --color=always --group-directories-first --icons=always";
+      "l." = "eza -a | grep -e '^\.'";
+
+      # Nawigacja
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+
+      # Inne narzędzia
+      grep = "grep --color=auto";
+      cat = "bat";
+      hw = "hwinfo --short";
+
+      # Specyficzne dla Arch/CachyOS (zostaw tylko jeśli masz te komendy w systemie)
+      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu";
+      cleanup = "sudo pacman -Rns (pacman -Qtdq)";
+    };
+
+    # 3. Funkcje (przeniesione z cachyos-config.fish)
+    functions = {
+      backup = "cp $argv $argv.bak";
+      # Funkcja copy z pliku jest nieco bardziej złożona,
+      # w Nix łatwiej zdefiniować ją tak lub pominąć:
+      copy = ''
+        set count (count $argv | tr -d \n)
+        if test "$count" = 2; and test -d "$argv[1]"
+            set from (echo $argv[1] | string trim -r /)
+            set to (echo $argv[2])
+            command cp -r $from $to
+        else
+            command cp $argv
+        end
+      '';
+    };
+
+    # 4. Inicjalizacja i zmienne (przeniesione z)
+    interactiveShellInit = ''
+      # Ustawienia wtyczki 'done'
+      set -U __done_min_cmd_duration 10000
+      set -U __done_notification_urgency_level low
+
+      # Powitanie fastfetch
+      function fish_greeting
+          fastfetch
+      end
+
+      # Kolorowe man pages przy użyciu bat
+      set -x MANROFFOPT "-c"
+      set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+
+      # Fix dla Javy (jeśli używasz)
+      set -x _JAVA_AWT_WM_NONREPARENTING 1
+    '';
+  };
+
+  home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
-    pkgs.hello
-    pkgs.nil
-    pkgs.nixd
+    hello
+    nil
+    nixd
 
-    pkgs.kdePackages.kleopatra
+    kdePackages.kleopatra
+
+    eza # Wymagane przez aliasy 'ls'
+    fastfetch # Używane w fish_greeting
+    bat # Używane do kolorowania man pages
+    hwinfo # Używane przez alias 'hw'
+    fzf # Opcjonalnie, często przydatne w fish
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -101,7 +181,26 @@
   #  /etc/profiles/per-user/dinosaur/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "kate";
+
+    EDITOR = "code";
+
+    # Kluczowe dla aplikacji Electron z Nixpkgs (VS Code, Discord)
+    NIXOS_OZONE_WL = "1";
+
+    # Qt
+    QT_QPA_PLATFORM = "wayland";
+
+    # GTK
+    GDK_BACKEND = "wayland";
+
+    # Firefox
+    MOZ_ENABLE_WAYLAND = "1";
+
+    # SDL (Gry)
+    SDL_VIDEODRIVER = "wayland";
+
+    # Java (Fix dla renderingu GUI w tiling WM)
+    _JAVA_AWT_WM_NONREPARENTING = "1";
   };
 
   # Let Home Manager install and manage itself.
