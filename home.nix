@@ -1,6 +1,11 @@
 { config, pkgs, ... }:
 
 {
+  # Lista rzeczy do zainstalowania ręcznie:
+  # - wootility
+
+
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "dinosaur";
@@ -138,6 +143,8 @@
     kdePackages.breeze # styl wyświetlania
 
     bootdev-cli
+
+    yay
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
