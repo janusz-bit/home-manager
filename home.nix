@@ -1,10 +1,13 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # Lista rzeczy do zainstalowania ręcznie:
   # - wootility
-
-
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -146,6 +149,8 @@
 
     yay
 
+    qbittorrent-enhanced
+
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -216,11 +221,42 @@
     QT_STYLE_OVERRIDE = "breeze";
   };
 
-  # qt = {
-  #   enable = true;
-  #   platformTheme.name = "kde"; # Lub "gtk", jeśli wolisz integrację z GNOME
-  #   style.name = "breeze";
-  # };
+  # Co to robi:
+  #  - entryAfter ["writeBoundary"]: Uruchamia skrypt dopiero po tym, jak Home Manager zapisze wszystkie pliki konfiguracyjne.
+  #  - $DRY_RUN_CMD: Zapewnia, że komenda nie wykona się podczas testowania (home-manager build), a tylko przy faktycznej zmianie (switch).
+  #  - ln -sf ...: Tworzy (lub odświeża) link symboliczny, dzięki któremu KDE widzi aplikacje.
+
+  home.activation = {
+    linkDesktopApplications = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      $DRY_RUN_CMD mkdir -p $HOME/.local/share/applications
+      $DRY_RUN_CMD ln -sf $HOME/.nix-profile/share/applications $HOME/.local/share/applications/nix-apps
+    '';
+  };
+
+  #   **Cause:**
+  # On non-NixOS systems ("Generic Linux"), the desktop environment (KDE Plasma) looks for application shortcuts (`.desktop` files)
+  # in `/usr/share/applications` and `~/.local/share/applications`.
+  # Home Manager installs them into the Nix store (`~/.nix-profile/share/applications`), which KDE doesn't see by default.
+
+  # **Solution:**
+  # Create a symbolic link to bridge the two locations. This is the most reliable fix for Arch/CachyOS.
+
+  # 1.  **Run this command in your terminal:**
+
+  #     ```bash
+  #     mkdir -p ~/.local/share/applications
+  #     ln -sf ~/.nix-profile/share/applications ~/.local/share/applications/nix-apps
+  #     ```
+
+  # 2.  **Force KDE to refresh its menu cache:**
+
+  #     ```bash
+  #     kbuildsycoca6
+  #     ```
+
+  #     *(If that command is not found, try `kbuildsycoca5`)*.
+
+  # The apps should appear immediately. You only need to do this once; Home Manager will update the content inside that folder automatically.
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
