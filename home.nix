@@ -165,20 +165,17 @@
     # '')
   ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+  # Zarządzanie plikami w folderze domowym.
+  # Ta sekcja umieszcza profil kolorów ICC w standardowej lokalizacji,
+  # aby był automatycznie wykrywany przez aplikacje.
+  home.file."assets-home-manager" = {
+    # Plik źródłowy musi znajdować się w tym samym folderze co home.nix
+    # lub musisz podać do niego pełną ścieżkę.
+    source = ./assets;
+    recursive = true;
   };
+
+
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -228,8 +225,11 @@
 
   home.activation = {
     linkDesktopApplications = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      $DRY_RUN_CMD mkdir -p $HOME/.local/share/applications
-      $DRY_RUN_CMD ln -sf $HOME/.nix-profile/share/applications $HOME/.local/share/applications/nix-apps
+      # Upewnij się, że katalog docelowy istnieje
+      $DRY_RUN_CMD mkdir -p "$HOME/.local/share/applications"
+      # Usuń istniejący plik lub katalog, a następnie utwórz link symboliczny
+      $DRY_RUN_CMD rm -rf "$HOME/.local/share/applications/nix-apps"
+      $DRY_RUN_CMD ln -s "$HOME/.nix-profile/share/applications" "$HOME/.local/share/applications/nix-apps"
     '';
   };
 
