@@ -5,14 +5,14 @@
   ...
 }:
 
-{
+rec {
   # Lista rzeczy do zainstalowania ręcznie:
   # - wootility
 
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "dinosaur";
-  home.homeDirectory = "/home/dinosaur";
+  home.homeDirectory = "/home/${home.username}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -56,6 +56,11 @@
 
   services.syncthing.enable = true;
 
+  programs.discord = {
+    enable = true;
+    # package = pkgs.vesktop;
+  };
+
   programs.fish = {
     enable = true;
 
@@ -87,7 +92,7 @@
       hw = "hwinfo --short";
 
       # Specyficzne dla Arch/CachyOS (zostaw tylko jeśli masz te komendy w systemie)
-      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu";
+      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu && yay -Syu && sudo nix flake update --flake ${home.homeDirectory}/.config/home-manager/ && home-manager switch -b backup";
       cleanup = "sudo pacman -Rns (pacman -Qtdq)";
     };
 
@@ -174,8 +179,6 @@
     source = ./assets;
     recursive = true;
   };
-
-
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
