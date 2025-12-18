@@ -24,10 +24,10 @@ rec {
   targets.genericLinux.enable = true;
   targets.genericLinux.gpu.nvidia = {
     enable = true;
-    version = "580.105.08";
-    sha256 = "sha256-2cboGIZy8+t03QTPpp3VhHn6HQFiyMKMjRdiV2MpNHU=";
-    #   nix store prefetch-file \
-    #   https://download.nvidia.com/XFree86/Linux-x86_64/580.105.08/NVIDIA-Linux-x86_64-580.105.08.run
+    version = "580.119.02";
+    sha256 = "sha256-gCD139PuiK7no4mQ0MPSr+VHUemhcLqerdfqZwE47Nc=";
+      # nix store prefetch-file \
+      # https://download.nvidia.com/XFree86/Linux-x86_64/580.119.02/NVIDIA-Linux-x86_64-580.119.02.run
 
     # pacman -Q nvidia-utils
   };
@@ -159,6 +159,8 @@ rec {
     obsidian
 
     pandoc
+
+    krita
 
 
 
