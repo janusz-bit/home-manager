@@ -62,6 +62,9 @@ rec {
     # package = pkgs.vesktop;
   };
 
+  programs.gh.enable = true;
+
+
   programs.fish = {
     enable = true;
 
@@ -93,7 +96,7 @@ rec {
       hw = "hwinfo --short";
 
       # Specyficzne dla Arch/CachyOS (zostaw tylko jeśli masz te komendy w systemie)
-      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu && yay -Syu && sudo nix flake update --flake ${home.homeDirectory}/.config/home-manager/ && home-manager switch -b backup";
+      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu --noconfirm && yay -Syu --noconfirm && sudo nix flake update --flake ${home.homeDirectory}/.config/home-manager/ && home-manager switch -b backup && cd ${home.homeDirectory}/.config/home-manager/ && git add . && git commit -m 'update' && git push";
       cleanup = "sudo pacman -Rns (pacman -Qtdq)";
     };
 
@@ -166,7 +169,6 @@ rec {
     signal-desktop
 
     fresh.packages.x86_64-linux.default
-
 
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
