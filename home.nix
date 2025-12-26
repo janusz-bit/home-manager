@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  fresh,
   ...
 }:
 
@@ -161,6 +162,10 @@ rec {
     pandoc
 
     krita
+
+    signal-desktop
+
+    fresh.packages.x86_64-linux.default
 
 
 
