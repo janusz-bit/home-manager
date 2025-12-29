@@ -14,12 +14,8 @@
   outputs =
     { nixpkgs, home-manager, fresh, ... } @ attrs:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      homeConfigurations."dinosaur" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      mkHome = system: home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.${system};
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
@@ -29,5 +25,9 @@
         # to pass through arguments to home.nix
         extraSpecialArgs = attrs;
       };
+    in
+    {
+      homeConfigurations."dinosaur" = mkHome "x86_64-linux";
+      homeConfigurations."droid" = mkHome "aarch64-linux";
     };
 }
