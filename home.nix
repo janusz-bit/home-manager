@@ -56,6 +56,7 @@ rec {
   };
 
   services.syncthing.enable = true;
+  services.ssh-agent.enable = true;
 
   programs.discord = {
     enable = true;
@@ -134,6 +135,9 @@ rec {
 
       # Fix dla Javy (jeśli używasz)
       set -x _JAVA_AWT_WM_NONREPARENTING 1
+
+      # SSH Agent
+      eval (ssh-agent -c)
     '';
   };
 
@@ -157,6 +161,8 @@ rec {
     bootdev-cli
 
     yay
+    # Sugestia: Używaj systemowego yay na Arch Linux, aby uniknąć konfliktów bibliotek.
+    # yay 
 
     qbittorrent-enhanced
 
@@ -172,21 +178,7 @@ rec {
 
     libreoffice-qt-fresh
 
-    nixfmt
-
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    nixfmt-rfc-style
   ];
 
   # Zarządzanie plikami w folderze domowym.
@@ -236,6 +228,10 @@ rec {
 
     # Java (Fix dla renderingu GUI w tiling WM)
     _JAVA_AWT_WM_NONREPARENTING = "1";
+
+    # Man pages z kolorowaniem (bat)
+    MANROFFOPT = "-c";
+    MANPAGER = "sh -c 'col -bx | bat -l man -p'";
 
     QT_STYLE_OVERRIDE = "breeze";
   };
