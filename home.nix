@@ -27,8 +27,8 @@ rec {
     enable = true;
     version = "580.119.02";
     sha256 = "sha256-gCD139PuiK7no4mQ0MPSr+VHUemhcLqerdfqZwE47Nc=";
-      # nix store prefetch-file \
-      # https://download.nvidia.com/XFree86/Linux-x86_64/580.119.02/NVIDIA-Linux-x86_64-580.119.02.run
+    # nix store prefetch-file \
+    # https://download.nvidia.com/XFree86/Linux-x86_64/580.119.02/NVIDIA-Linux-x86_64-580.119.02.run
 
     # pacman -Q nvidia-utils
   };
@@ -64,7 +64,6 @@ rec {
   };
 
   programs.gh.enable = true;
-
 
   programs.fish = {
     enable = true;
@@ -162,7 +161,7 @@ rec {
 
     yay
     # Sugestia: Używaj systemowego yay na Arch Linux, aby uniknąć konfliktów bibliotek.
-    # yay 
+    # yay
 
     qbittorrent-enhanced
 
@@ -174,11 +173,13 @@ rec {
 
     signal-desktop
 
-    fresh.packages.x86_64-linux.default
+    # fresh.packages.x86_64-linux.default
 
     libreoffice-qt-fresh
 
     nixfmt-rfc-style
+
+    bitwarden-desktop
   ];
 
   # Zarządzanie plikami w folderze domowym.
@@ -234,6 +235,8 @@ rec {
     MANPAGER = "sh -c 'col -bx | bat -l man -p'";
 
     QT_STYLE_OVERRIDE = "breeze";
+
+    PROTON_ENABLE_WAYLAND = "1";
   };
 
   # Co to robi:
