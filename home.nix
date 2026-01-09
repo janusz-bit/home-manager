@@ -237,6 +237,18 @@ rec {
     QT_STYLE_OVERRIDE = "breeze";
 
     PROTON_ENABLE_WAYLAND = "1";
+
+    PROTON_USE_NTSYNC="1";
+
+    PROTON_DLSS_UPGRADE="1";
+
+    PROTON_DLSS_INDICATOR="1";
+
+    PROTON_NVIDIA_LIBS="1";
+
+    PROTON_NO_WM_DECORATION="1";
+
+    PROTON_ENABLE_HDR="1";
   };
 
   # Co to robi:
