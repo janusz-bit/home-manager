@@ -41,8 +41,8 @@ rec {
   nixpkgs.config.nvidia.acceptLicense = true;
 
   # Shels
-  home.shell.enableShellIntegration = true;
-  home.shell.enableFishIntegration = true;
+  home.shell.enableShellIntegration = false;
+  home.shell.enableFishIntegration = false;
 
   programs.vscode.enable = true;
 
@@ -66,7 +66,7 @@ rec {
   programs.gh.enable = true;
 
   programs.fish = {
-    enable = true;
+    enable = false;
 
     # 1. Wtyczki (odpowiednik conf.d/done.fish)
     plugins = [
