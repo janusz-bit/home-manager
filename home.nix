@@ -25,10 +25,10 @@ rec {
   targets.genericLinux.enable = true;
   targets.genericLinux.gpu.nvidia = {
     enable = true;
-    version = "580.119.02";
-    sha256 = "sha256-gCD139PuiK7no4mQ0MPSr+VHUemhcLqerdfqZwE47Nc=";
+    version = "590.48.01";
+    sha256 = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
     # nix store prefetch-file \
-    # https://download.nvidia.com/XFree86/Linux-x86_64/580.119.02/NVIDIA-Linux-x86_64-580.119.02.run
+    # https://download.nvidia.com/XFree86/Linux-x86_64/590.48.01/NVIDIA-Linux-x86_64-590.48.01.run
 
     # pacman -Q nvidia-utils
   };
