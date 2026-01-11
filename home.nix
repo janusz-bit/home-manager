@@ -41,7 +41,7 @@ rec {
   nixpkgs.config.nvidia.acceptLicense = true;
 
   # Shels
-  home.shell.enableShellIntegration = false;
+  home.shell.enableShellIntegration = true;
   home.shell.enableFishIntegration = false;
 
   programs.vscode.enable = true;
@@ -64,6 +64,49 @@ rec {
   };
 
   programs.gh.enable = true;
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
+
+    plugins = [
+      {
+        name = "powerlevel10k";
+        src = pkgs.zsh-powerlevel10k;
+        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      }
+    ];
+
+    shellAliases = {
+      # Eza zamiast ls
+      ls = "eza -al --color=always --group-directories-first --icons=always";
+      la = "eza -a --color=always --group-directories-first --icons=always";
+      ll = "eza -l --color=always --group-directories-first --icons=always";
+      lt = "eza -aT --color=always --group-directories-first --icons=always";
+      "l." = "eza -a | grep -e '^\.'";
+
+      # Nawigacja
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+
+      # Inne narzędzia
+      grep = "grep --color=auto";
+      cat = "bat";
+      hw = "hwinfo --short";
+
+      # Specyficzne dla Arch/CachyOS (zostaw tylko jeśli masz te komendy w systemie)
+      update = "sudo cachyos-rate-mirrors && sudo pacman -Syu --noconfirm && yay -Syu --noconfirm && sudo nix flake update --flake ${home.homeDirectory}/.config/home-manager/ && home-manager switch -b backup && cd ${home.homeDirectory}/.config/home-manager/ && git add . && git commit -m 'update' && git push";
+      cleanup = "sudo pacman -Rns (pacman -Qtdq)";
+    };
+
+    initContent = ''
+      # Ładowanie konfiguracji p10k (jeśli istnieje)
+      [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+    '';
+  };
 
   programs.fish = {
     enable = false;
