@@ -53,6 +53,7 @@ rec {
 
     user.name = "janusz-bit";
     user.email = "janusz-bit@proton.me";
+    init.defaultBranch = "master";
   };
 
   services.syncthing.enable = true;
