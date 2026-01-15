@@ -42,6 +42,7 @@ rec {
 
   # Shels
   home.shell.enableShellIntegration = true;
+  home.shell.enableZshIntegration = true;
   home.shell.enableFishIntegration = false;
 
   programs.vscode.enable = true;
@@ -53,7 +54,7 @@ rec {
 
     user.name = "janusz-bit";
     user.email = "janusz-bit@proton.me";
-    init.defaultBranch = "master";
+    init.defaultBranch = "main";
   };
 
   services.syncthing.enable = true;
@@ -97,6 +98,7 @@ rec {
       grep = "grep --color=auto";
       cat = "bat";
       hw = "hwinfo --short";
+      english = "export LANG=en_US.UTF-8";
 
       # Specyficzne dla Arch/CachyOS (zostaw tylko jeśli masz te komendy w systemie)
       update = "sudo cachyos-rate-mirrors && sudo pacman -Syu --noconfirm && yay -Syu --noconfirm && sudo nix flake update --flake ${home.homeDirectory}/.config/home-manager/ && home-manager switch -b backup && cd ${home.homeDirectory}/.config/home-manager/ && git add . && git commit -m 'update' && git push";
@@ -254,7 +256,7 @@ rec {
   #
   home.sessionVariables = {
 
-    EDITOR = "code";
+    EDITOR = "zeditor";
 
     # Kluczowe dla aplikacji Electron z Nixpkgs (VS Code, Discord)
     # NIXOS_OZONE_WL = "1";
