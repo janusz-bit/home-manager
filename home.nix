@@ -256,7 +256,7 @@ rec {
   #
   home.sessionVariables = {
 
-    EDITOR = "zeditor";
+    EDITOR = "zeditor --wait";
 
     # Kluczowe dla aplikacji Electron z Nixpkgs (VS Code, Discord)
     # NIXOS_OZONE_WL = "1";
