@@ -67,6 +67,8 @@ rec {
 
   programs.gh.enable = true;
 
+  home.sessionPath = ["$HOME/go/bin"];
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -203,7 +205,7 @@ rec {
 
     kdePackages.breeze # styl wyświetlania
 
-    bootdev-cli
+    # bootdev-cli
 
     yay
     # Sugestia: Używaj systemowego yay na Arch Linux, aby uniknąć konfliktów bibliotek.
